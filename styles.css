@@ -1,0 +1,161 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  color: #34495e;
+  font-family: 'Roboto', sans-serif;
+  background: #e6e6e6;
+/*    #F7F8FF; */
+}
+
+body {
+  margin-bottom: 50px;
+}
+
+.score-section {
+  margin: 30px auto 0;
+}
+
+.score-header {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.main-container {
+  width: 380px;
+  margin: 0 auto;
+}
+
+.container-item {
+  margin-bottom: 20px;
+}
+
+.score-code-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.score-code {
+  padding: 12px 20px;
+  margin: 0 15px;
+  letter-spacing: normal;
+  word-spacing: normal;
+  border: 3px solid #ccc;
+  color: initial;
+  transition: 0.5s;
+  outline-width: 0;
+}
+
+.score-button {
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  border: 0;
+  border-radius: 40px;
+  font-size: 1em;
+  color: #fff;
+  outline-width: 0;
+}
+
+.score-button:hover{
+	opacity: 1;
+  transform: scale(1, 1);
+  background-color: rgba(255,255,255,0.5);
+}
+
+.score-button-code {
+  background: #1EA9F5;
+}
+
+.score-button-code:hover {
+  color: #1EA9F5;
+  border: 1px solid #1EA9F5;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  margin: 0px 5px 0;
+  padding: 15px;
+  border-top: 1px solid #34495e;
+  width: 100%;
+  color: #34495e;
+}
+
+.voting-container {
+  display: flex;
+  align-items: center;
+}
+
+.voting-header {
+  text-align: center;
+}
+
+.voting-name {
+  margin-right: 48px;
+}
+
+/* ////////////////////////////////////////////////////// */
+
+.acidjs-rating-stars,
+.acidjs-rating-stars label::before
+{
+    display: inline-block;
+}
+ 
+.acidjs-rating-stars label:hover,
+.acidjs-rating-stars label:hover ~ label
+{
+    color: #e67e22;
+}
+ 
+.acidjs-rating-stars *
+{
+    margin: 0;
+    padding: 0;
+}
+ 
+.acidjs-rating-stars input
+{
+    display: none;
+}
+ 
+.acidjs-rating-stars
+{
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+ 
+.acidjs-rating-stars label
+{
+    color: #95a5a6;
+}
+ 
+.acidjs-rating-stars label::before
+{
+    content: "\2605";
+    width: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 30px;
+    cursor: pointer;
+}
+ 
+.acidjs-rating-stars input:checked ~ label
+{
+    color: #f1c40f;
+}
+ 
+.acidjs-rating-disabled
+{
+    opacity: .50;
+     
+    -webkit-pointer-events: none;
+    -moz-pointer-events: none;
+    pointer-events: none;
+}
