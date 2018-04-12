@@ -5,6 +5,7 @@
 }
 
 html {
+  height: 100%;
   font-size: 16px;
   color: #34495e;
   font-family: 'Roboto', sans-serif;
@@ -13,21 +14,26 @@ html {
 }
 
 body {
-  margin-bottom: 50px;
+  height: 100%;
 }
 
-.score-section {
-  margin: 30px auto 0;
+.main-content {
+  min-height: calc(100% - 50px);
+  padding: 50px 0 20px;
 }
 
 .score-header {
+  padding-left: 30px;
   margin-bottom: 50px;
   text-align: center;
 }
 
 .main-container {
-  width: 380px;
+  min-width: 380px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .container-item {
@@ -77,14 +83,13 @@ body {
   border: 1px solid #1EA9F5;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  margin: 0px 5px 0;
-  padding: 15px;
-  border-top: 1px solid #34495e;
-  width: 100%;
-  color: #34495e;
+.error {
+  display: none;
+  color: #c0392b;
+}
+
+.shop-info {
+  display: none;
 }
 
 .voting-container {
@@ -97,7 +102,16 @@ body {
 }
 
 .voting-name {
-  margin-right: 48px;
+  width: 90px;
+}
+
+.footer {
+  height: 50px;
+  margin: 0px 5px 0;
+  padding: 15px;
+  border-top: 1px solid #34495e;
+  width: 100%;
+  color: #34495e;
 }
 
 /* ////////////////////////////////////////////////////// */
