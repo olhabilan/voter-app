@@ -68,6 +68,11 @@ body {
   outline-width: 0;
 }
 
+.button-submitCode {
+  width: 100px;
+  border-radius: 20px;
+}
+
 .score-button:hover{
 	opacity: 1;
   transform: scale(1, 1);
@@ -85,6 +90,7 @@ body {
 
 .error {
   display: none;
+  padding-bottom: 15px;
   color: #c0392b;
 }
 
