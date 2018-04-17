@@ -1,7 +1,7 @@
 CREATE DATABASE poll_result;
 USE poll_result;
 GO;
-CREATE TABLE IF NOT EXISTS poll result
+CREATE TABLE IF NOT EXISTS result
 (
     supermarket_id int NOT NULL AUTO_INCREMENT,
     supermarket_name CHAR(30) NOT NULL,
