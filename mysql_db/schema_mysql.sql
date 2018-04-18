@@ -1,6 +1,6 @@
-CREATE DATABASE supermarket_code;
+CREATE DATABASE IF NOT EXISTS supermarket_code;
 USE supermarket_code;
-GO;
+#GO;
 CREATE TABLE IF NOT EXISTS supermarket
 (
     supermarket_id int NOT NULL AUTO_INCREMENT,

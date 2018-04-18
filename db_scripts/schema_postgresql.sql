@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS result
     avg_price_score float,
     avg_service_score float,
     avg_overall_score float,
+    count int,
     PRIMARY KEY (supermarket_id)
 );
 

@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: voter-ns
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: voter-ns
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: voter-ns
+  name: mysql-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+  namespace: voter-ns
+type: Opaque
+data:
+  password: cGFzc3dvcmQ=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: voter-ns
+  name: mysql-initdb-config
+data:
+  initdb.sql: |
+    CREATE DATABASE IF NOT EXISTS supermarket_code;
+    USE supermarket_code;
+    CREATE TABLE IF NOT EXISTS supermarket
+    (
+        supermarket_id int NOT NULL AUTO_INCREMENT,
+        supermarket_name CHAR(30) NOT NULL,
+        PRIMARY KEY (supermarket_id)
+    );
+    CREATE TABLE IF NOT EXISTS code
+    (
+        code_id int NOT NULL AUTO_INCREMENT,
+        code_value CHAR(30) NOT NULL,
+        supermarket_id int NOT NULL,
+        purchase_date datetime NOT NULL,
+        PRIMARY KEY (code_id),
+        FOREIGN KEY(supermarket_id) references supermarket(supermarket_id)
+    );
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: voter-ns
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: voter-ns
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:5.7
+        name: mysql
+        env:
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-initdb
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+      - name: mysql-initdb
+        configMap:
+          name: mysql-initdb-config
