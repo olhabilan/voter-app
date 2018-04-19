@@ -1,0 +1,1 @@
+1. kubectl exec -it pod_id -n voter-ns -- /bin/bash

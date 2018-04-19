@@ -1,6 +1,5 @@
-CREATE DATABASE poll_result;
-USE poll_result;
-GO;
+CREATE DATABASE IF NOT EXISTS poll_result;
+\c poll_result;
 CREATE TABLE IF NOT EXISTS result
 (
     supermarket_id int NOT NULL AUTO_INCREMENT,
