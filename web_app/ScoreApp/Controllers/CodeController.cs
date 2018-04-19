@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ScoreApp.DataAccess;
 using ScoreApp.Models;
+using ScoreApp.Models.DataModels;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ScoreApp.Controllers
 {
@@ -9,28 +13,32 @@ namespace ScoreApp.Controllers
     {
         [Route("test")]
         [HttpGet]
-        public IActionResult Test()
+        public IActionResult Test([FromServices] IRepository<Code> codes, [FromServices] IRepository<Supermarket> sup)
         {
-            var t = new DatabaseContext("server=localhost;UserId=root;Password=1111;database=supermarket_code;SslMode=none");
-            var d = new Repository<Code>(t);
-            var gg = d.SelectAll().First();
+            var gg = codes.SelectAll().First();
+            var gg2 = sup.SelectAll().First();
 
             return Ok();
         }
 
         [Route("code")]
         [HttpGet]
-        public IActionResult Index([FromQuery]string number)
+        public async Task<IActionResult> Index([FromQuery]string number, [FromServices] DatabaseContext context)
         {
-            if (number.Equals("1212"))
-            {
+            var supermarketName = await (from codes in context.Codes
+                     join supermarkets in context.Supermarkets
+                     on codes.SupermarketId equals supermarkets.Id
+                     where codes.CodeValue.Equals(number, StringComparison.InvariantCulture)
+                     select supermarkets.Name).FirstOrDefaultAsync();
+
+            if(string.IsNullOrEmpty(supermarketName))
                 return BadRequest();
-            }
 
             var result = new {
                 success = true,
-                shop = "Silpo"
+                shop = supermarketName
             };
+
             return Json(result);
         }
 
