@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker
+  namespace: voter-ns
+spec:
+  selector:
+    app: worker
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: voter-ns
+  name: worker
+spec:
+  selector:
+    matchLabels:
+      app: worker
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: voter-ns
+      labels:
+        app: worker
+    spec:
+      containers:
+      - image: olias/worker:v2
+        imagePullPolicy: Always
+        name: worker
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: password
+        - name: POSTGRES_HOST
+          value: postgresql.voter-ns
+        - name: MONGO_HOST
+          value: mongo.voter-ns
