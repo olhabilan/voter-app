@@ -28,6 +28,10 @@ namespace ScoreApp
 
             services.AddSingleton(x => new DatabaseContext(Configuration.GetConnectionString("MySqlConnection")));
             services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
+
+            services.AddSingleton(typeof(IMongoContext), x => new MongoContext(
+                Configuration.GetConnectionString("Mongo:ConnectionString"), 
+                Configuration.GetConnectionString("Mongo:Database")));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
