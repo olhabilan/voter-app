@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+  namespace: voter-ns
+spec:
+  selector:
+    app: web-app
+  type: NodePort
+  ports:
+  - name: "web-app"
+    port: 80
+    nodePort: 30080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: voter-ns
+  name: web-app
+spec:
+  selector:
+    matchLabels:
+      app: web-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: voter-ns
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - image: olias/web-app:v1
+        imagePullPolicy: Always
+        name: web-app
+        ports:
+        - containerPort: 80
+          name: web-app
+

@@ -1,0 +1,10 @@
+{
+  "main": "youtube_api.js",
+  "scripts": {
+    "start": "node youtube_api.js"
+  },
+  "dependencies": {
+    "ejs": "^2.5.8",
+    "express": "^4.16.3"
+  }
+}

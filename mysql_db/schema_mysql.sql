@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS code
     code_value CHAR(30) NOT NULL,
     supermarket_id int NOT NULL,
     purchase_date datetime NOT NULL,
+    is_used BOOLEAN NOT NULL,
     PRIMARY KEY (code_id),
     FOREIGN KEY(supermarket_id) references supermarket(supermarket_id)
 );
