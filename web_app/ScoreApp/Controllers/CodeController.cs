@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ScoreApp.DataAccess;
 using ScoreApp.Models;
+using ScoreApp.Models.DataModels;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
+using MongoDB.Driver;
 
 namespace ScoreApp.Controllers
 {
@@ -9,36 +14,59 @@ namespace ScoreApp.Controllers
     {
         [Route("test")]
         [HttpGet]
-        public IActionResult Test()
+        public IActionResult Test([FromServices] IRepository<Code> codes, [FromServices] IRepository<Supermarket> sup, [FromServices] IMongoContext mongo)
         {
-            var t = new DatabaseContext("server=localhost;UserId=root;Password=1111;database=supermarket_code;SslMode=none");
-            var d = new Repository<Code>(t);
-            var gg = d.SelectAll().First();
+            mongo.ScoreItems.InsertOne(new ScoreItem() { Code = "test2", OverallScore = 3, PriceScore = 3, ServiceScore = 3, SupermarketName = "yo" });
+            
+            //var client = new MongoClient("mongodb://localhost:27017");
+            // var database = client.GetDatabase("result");
+            //var t = database.GetCollection<ScoreItem>("scoreCollection");
+            //t.InsertOne(new ScoreItem() { Code = "test", OverallScore = 3, PriceScore = 3, ServiceScore = 3, SupermarketName = "yo" });
+
+            //var gg = codes.SelectAll().First();
+            //var gg2 = sup.SelectAll().First();
 
             return Ok();
         }
 
         [Route("code")]
         [HttpGet]
-        public IActionResult Index([FromQuery]string number)
+        public async Task<IActionResult> Index([FromQuery]string number, [FromServices] DatabaseContext context)
         {
-            if (number.Equals("1212"))
-            {
+            var supermarketName = await (from codes in context.Codes
+                     join supermarkets in context.Supermarkets
+                     on codes.SupermarketId equals supermarkets.Id
+                     where codes.CodeValue.Equals(number, StringComparison.InvariantCulture)
+                     select supermarkets.Name).FirstOrDefaultAsync();
+
+            if(string.IsNullOrEmpty(supermarketName))
                 return BadRequest();
-            }
 
             var result = new {
                 success = true,
-                shop = "Silpo"
+                shop = supermarketName
             };
+
             return Json(result);
         }
 
         [Route("info")]
         [HttpPost]
-        public IActionResult Info([FromBody] ShopInfo info)
+        public async Task<IActionResult> Info([FromBody] ShopInfo info, [FromServices] IMongoContext mongo)
         {
-            var t = info.Mark.Overall;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("incorrect model");
+            }
+
+            await mongo.ScoreItems.InsertOneAsync(new ScoreItem() {
+                Code = info.Code,
+                SupermarketName = info.Shop,
+                OverallScore = info.Mark.Overall,
+                PriceScore = info.Mark.Price,
+                ServiceScore = info.Mark.Service
+            });
+
             return Ok();
         }
     }

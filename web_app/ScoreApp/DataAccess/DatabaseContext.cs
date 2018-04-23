@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ScoreApp.Models;
+using ScoreApp.Models.DataModels;
 
 namespace ScoreApp.DataAccess
 {
@@ -12,7 +13,7 @@ namespace ScoreApp.DataAccess
             _connectionString = connectionString;
         }
         public DbSet<Code> Codes { get; set; }
-        //public DbSet<Substitution> Substitutions { get; set; }
+        public DbSet<Supermarket> Supermarkets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

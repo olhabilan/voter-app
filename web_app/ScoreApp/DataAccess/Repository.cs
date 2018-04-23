@@ -2,22 +2,24 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ScoreApp.DataAccess
 {
     public interface IRepository<T>
     {
+        DatabaseContext DBContext { get; }
         void Insert(T entity);
         void Delete(T entity);
         void Update(T entity, T newValue);
         IQueryable<T> Find(Expression<Func<T, bool>> predicate);
         IQueryable<T> SelectAll();
-        void SubmitAll();
+        Task SubmitAllAsync();
     }
 
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected DatabaseContext DBContext { get; set; }
+        public DatabaseContext DBContext { get; }
 
         public Repository(DatabaseContext dataContext)
         {
@@ -51,9 +53,9 @@ namespace ScoreApp.DataAccess
             return DBContext.Set<T>();
         }
 
-        public void SubmitAll()
+        public async Task SubmitAllAsync()
         {
-            DBContext.SaveChanges();
+            await DBContext.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }
