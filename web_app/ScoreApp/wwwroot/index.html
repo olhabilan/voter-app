@@ -4,16 +4,63 @@
 <meta charset="utf-8">
 <title>Home page</title>
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="styles.css">
+<meta name='viewport'
+      content='width=device-width, initial-scale=1.0, maximum-scale=1.0' />
+<script src="script.js"></script>
 </head>
 <body>
     <div class="main-content">
         <section>
             <h1 class="score-header">Rate your shopping!</h1>
+            <div class="main-container">
+                <div class="container-item score-code-container">
+                    <label for="code">Enter code</label>
+                    <div>
+                        <input id="code" type="text" class="score-code" /> 
+                        <input id="submit-code" class="score-button score-button-code" type="button" value="&#8594;" />
+                    </div>
+                </div>
+                <div id="error" class="error"></div>
+                <div id="shop-info" class="shop-info">
+                    <h2 id="shop-name" class="container-item voting-header">Temp</h2>
+                    <div class="container-item voting-container">
+                        <div class="voting-name">Price</div>
+                        <div class="acidjs-rating-stars">
+                            <input type="radio" name="group-1" id="group-1-0" value="5" /><label for="group-1-0"></label>
+                            <input type="radio" name="group-1" id="group-1-1" value="4" /><label for="group-1-1"></label>
+                            <input type="radio" name="group-1" id="group-1-2" value="3" /><label for="group-1-2"></label>
+                            <input type="radio" name="group-1" id="group-1-3" value="2" /><label for="group-1-3"></label>
+                            <input type="radio" name="group-1" id="group-1-4"  value="1" /><label for="group-1-4"></label>
+                        </div>
+                    </div>
+                    <div class="container-item voting-container">
+                        <div class="voting-name">Service</div>
+                        <div class="acidjs-rating-stars">
+                            <input type="radio" name="group-2" id="group-2-0" value="5" /><label for="group-2-0"></label>
+                            <input type="radio" name="group-2" id="group-2-1" value="4" /><label for="group-2-1"></label>
+                            <input type="radio" name="group-2" id="group-2-2" value="3" /><label for="group-2-2"></label>
+                            <input type="radio" name="group-2" id="group-2-3" value="2" /><label for="group-2-3"></label>
+                            <input type="radio" name="group-2" id="group-2-4"  value="1" /><label for="group-2-4"></label>
+                        </div>
+                    </div>
+                    <div class="container-item voting-container">
+                        <div class="voting-name">Overall</div>
+                        <div class="acidjs-rating-stars">
+                            <input type="radio" name="group-3" id="group-3-0" value="5" /><label for="group-3-0"></label>
+                            <input type="radio" name="group-3" id="group-3-1" value="4" /><label for="group-3-1"></label>
+                            <input type="radio" name="group-3" id="group-3-2" value="3" /><label for="group-3-2"></label>
+                            <input type="radio" name="group-3" id="group-3-3" value="2" /><label for="group-3-3"></label>
+                            <input type="radio" name="group-3" id="group-3-4"  value="1" /><label for="group-3-4"></label>
+                        </div>
+                    </div>
+                    <input id="submit-info" class="score-button score-button-code button-submitCode" type="button" value="Send" />
+                </div>
+            </div>
         </section>
     </div>
     <footer class="footer">
-        Olha Bilan score 2018
+        Olya Bilan score 2018
     </footer>
 </body>
 </html>
