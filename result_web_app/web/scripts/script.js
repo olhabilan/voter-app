@@ -1,8 +1,29 @@
 console.log("hello");
 
+const headerRowId = "row-header";
+
 document.addEventListener("DOMContentLoaded", async e => { 
-  let res = await getData();
-  console.log(res);
+  let data = await getData();
+
+  let headerRow = document.getElementById(headerRowId);
+  for(let i = 0; i < data.shops.length; i++)
+  {
+  headerRow.insertAdjacentHTML('afterend', `<div class="row">
+                                              <div class="cell" data-title="Shop Name">`+
+                                                data.shops[i].name + `
+                                              </div>
+                                              <div class="cell" data-title="Price">` +
+                                                data.shops[i].price + `
+                                              </div>
+                                              <div class="cell" data-title="Service"> `+
+                                                data.shops[i].service + `
+                                              </div>
+                                              <div class="cell" data-title="Overall"> `+
+                                                data.shops[i].overall + `
+                                              </div>
+                                            </div>`);
+  }
+  console.log(data);
 });
 
 async function getData(params) {

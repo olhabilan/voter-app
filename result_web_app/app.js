@@ -8,7 +8,10 @@ app.get('/', (req, res) => {
 
 app.get('/result', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({ a: 1 }));
+  res.send(JSON.stringify({shops: [
+    {name: "Silpo", price: 12, service: 13, overall: 10},
+    {name: "Atb", price: 12, service: 13, overall: 10},
+  ]}));
 });
 
 app.use(express.static(__dirname + '/web'));
