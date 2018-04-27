@@ -1,9 +1,10 @@
-console.log("hello");
-
 const headerRowId = "row-header";
 
 document.addEventListener("DOMContentLoaded", async e => { 
   let data = await getData();
+
+  if(data == null)
+    return;
 
   let headerRow = document.getElementById(headerRowId);
   for(let i = 0; i < data.shops.length; i++)
