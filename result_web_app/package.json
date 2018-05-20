@@ -8,7 +8,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "pg": "^7.4.3"
+  },
   "devDependencies": {
     "express": "^4.16.3"
   }
