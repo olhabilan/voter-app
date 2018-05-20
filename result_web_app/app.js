@@ -1,9 +1,8 @@
 const express = require('express');
 const db = require('pg');
 const app = new express();
-const connectionString = process.env.DATABASE_URL || 'postgres://gwpafabl:-5ZaqbuJee1ug6h4roma79HI47NOej6S@elmer.db.elephantsql.com:5432/gwpafabl';
-const client = new db.Client(connectionString);
-
+const config = require('./appconfig.json');
+const connectionString = process.env.DATABASE_URL || config.ConnectionString;
 app.get('/', (req, res) => {
 
   res.sendFile(__dirname + '/web/index.html');
@@ -11,6 +10,7 @@ app.get('/', (req, res) => {
 
 app.get('/result', async (req, res, next) => {
   try {
+    let client = new db.Client(connectionString);
     await client.connect();
     const query = await client.query('select * from result;');
     let shops = query.rows.map((val, index) => {
