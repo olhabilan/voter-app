@@ -22,6 +22,9 @@ document.addEventListener("DOMContentLoaded", async e => {
                                               <div class="cell" data-title="Overall"> `+
                                                 data.shops[i].overall + `
                                               </div>
+                                              <div class="cell" data-title="Count"> `+
+                                                data.shops[i].count + `
+                                              </div>
                                             </div>`);
   }
   console.log(data);

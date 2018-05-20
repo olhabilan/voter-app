@@ -185,6 +185,7 @@ iframe {
 }
 
 .row .cell {
+  text-align: center;
   font-family: Poppins-Regular;
   font-size: 15px;
   color: #666666;
@@ -208,7 +209,7 @@ iframe {
 }
 
 .row .cell:nth-child(1) {
-  width: 360px;
+ /*  width: 300px; */
   padding-left: 40px;
 }
 
