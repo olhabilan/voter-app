@@ -21,7 +21,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: Secret
@@ -58,7 +58,7 @@ data:
         FOREIGN KEY(supermarket_id) references supermarket(supermarket_id)
     );
 ---
-apiVersion: apps/v1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   namespace: voter-ns
@@ -76,7 +76,7 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: mysql:5.7
+      - image: mysql:5.6
         name: mysql
         env:
           # Use secret in real usage

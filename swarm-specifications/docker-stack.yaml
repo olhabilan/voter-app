@@ -1,0 +1,97 @@
+version: "3"
+services:
+
+  mysql:
+    image: mysql:5.6
+    ports:
+      - "3306"
+    networks:
+      - backend
+    volumes:
+      - db-data-mysql:/var/lib/mysql/data
+
+  postgres:
+    image: postgres:10.3
+    ports: 
+      - "5432"
+    volumes:
+      - db-data-postgres:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  mongo:
+    image: mongo:3.7
+    ports:
+      - "27017"
+    networks:
+      - backend
+    volumes:
+      - db-data-mongo:/data/db
+
+  web-app:
+    image: olias/web-app:v1
+    ports:
+      - 30080:80
+    networks:
+      - frontend
+    depends_on:
+      - mysql
+      - mongo
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  result-app:
+    image: olias/result-app:v1
+    ports:
+      - 30180:8080
+    networks:
+      - frontend
+    depends_on:
+      - postgres
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  worker-app:
+    image: olias/worker:v1
+    networks:
+      - backend
+    depends_on:
+      - postgres
+      - mongo
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  db-data-postgres:
+  db-data-mysql:
+  db-data-mongo:
