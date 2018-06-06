@@ -1,0 +1,11 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: basic-ingress
+  namespace: voter-ns
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: result-app-static-ip
+spec:
+  backend:
+    serviceName: result-app
+    servicePort: 8080
