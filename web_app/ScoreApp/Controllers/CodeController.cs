@@ -7,11 +7,19 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using Microsoft.Extensions.Logging;
 
 namespace ScoreApp.Controllers
 {
     public class CodeController : Controller
     {
+        [Route("poll")]
+        [HttpGet]
+        public IActionResult Poll()
+        {
+            return File("~/index.html", "text/html");
+        }
+
         [Route("test")]
         [HttpGet]
         public IActionResult Test([FromServices] IRepository<Code> codes, [FromServices] IRepository<Supermarket> sup, [FromServices] IMongoContext mongo)
@@ -31,13 +39,25 @@ namespace ScoreApp.Controllers
 
         [Route("code")]
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery]string number, [FromServices] DatabaseContext context)
+        public async Task<IActionResult> Index([FromQuery]string number,
+            [FromServices] DatabaseContext context,
+            [FromServices] ILogger<CodeController> logger)
         {
-            var supermarketName = await (from codes in context.Codes
-                     join supermarkets in context.Supermarkets
-                     on codes.SupermarketId equals supermarkets.Id
-                     where codes.CodeValue.Equals(number, StringComparison.InvariantCulture)
-                     select supermarkets.Name).FirstOrDefaultAsync();
+            string supermarketName = null;
+            logger.LogInformation("Query mysql, code: {number}", number);
+
+            try
+            {
+                supermarketName = await (from codes in context.Codes
+                                         join supermarkets in context.Supermarkets
+                                         on codes.SupermarketId equals supermarkets.Id
+                                         where codes.CodeValue.Equals(number, StringComparison.InvariantCulture)
+                                         select supermarkets.Name).FirstOrDefaultAsync();
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, "Failed to request my sql");
+            }
+            
 
             if(string.IsNullOrEmpty(supermarketName))
                 return BadRequest();
@@ -52,20 +72,31 @@ namespace ScoreApp.Controllers
 
         [Route("info")]
         [HttpPost]
-        public async Task<IActionResult> Info([FromBody] ShopInfo info, [FromServices] IMongoContext mongo)
+        public async Task<IActionResult> Info([FromBody] ShopInfo info,
+            [FromServices] IMongoContext mongo,
+            [FromServices] ILogger<CodeController> logger)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("incorrect model");
             }
 
-            await mongo.ScoreItems.InsertOneAsync(new ScoreItem() {
-                Code = info.Code,
-                SupermarketName = info.Shop,
-                OverallScore = info.Mark.Overall,
-                PriceScore = info.Mark.Price,
-                ServiceScore = info.Mark.Service
-            });
+            logger.LogInformation("Inserting row into mongo");
+            try
+            {
+                await mongo.ScoreItems.InsertOneAsync(new ScoreItem()
+                {
+                    Code = info.Code,
+                    SupermarketName = info.Shop,
+                    OverallScore = info.Mark.Overall,
+                    PriceScore = info.Mark.Price,
+                    ServiceScore = info.Mark.Service
+                });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to insert row into mongo db");
+            }
 
             return Ok();
         }
