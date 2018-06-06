@@ -1,0 +1,5 @@
+psql -U postgres -W
+
+\c poll_result
+
+SELECT * FROM result
